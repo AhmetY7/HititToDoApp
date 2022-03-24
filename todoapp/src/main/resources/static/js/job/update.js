@@ -53,32 +53,33 @@ function getJobById(id) {
             for (index in data.data) {
                 select.options[select.options.length] = new Option(data.data[index].name, data.data[index].id);
             }
+            document.getElementById("updateID").innerText = id;
+            if(id !== "") {
+                $.ajax({
+                    type:"POST",
+                    contentType: "application/json",
+                    url: "/api/job/find",
+                    data: JSON.stringify({id:id}),
+                    dataType: 'json',
+                    cache: false,
+                    timeout: 600000,
+                    success: function (data) {
+                        document.getElementById("updateDescription").innerText = data.data.description;
+                        document.getElementById("updateTargetDate").value = data.data.targetDate.split('T')[0];
+                        const $select = document.querySelector('#updateStatus');
+                        $select.value = data.data.status.id;
+                    },
+                    error: function (e) {
+                        console.log("ERROR : ", e);
+                    }
+                });
+            }
         },
         error: function (e) {
             console.log("ERROR : ", e);
         }
     });
-    document.getElementById("updateID").innerText = id;
-    if(id !== "") {
-        $.ajax({
-            type:"POST",
-            contentType: "application/json",
-            url: "/api/job/find",
-            data: JSON.stringify({id:id}),
-            dataType: 'json',
-            cache: false,
-            timeout: 600000,
-            success: function (data) {
-                document.getElementById("updateDescription").innerText = data.data.description;
-                document.getElementById("updateTargetDate").value = data.data.targetDate.split('T')[0];
-                let element = document.getElementById("updateStatus");
-                element.value = data.data.status.id;
-            },
-            error: function (e) {
-                console.log("ERROR : ", e);
-            }
-        });
-    }
+
 }
 
 
