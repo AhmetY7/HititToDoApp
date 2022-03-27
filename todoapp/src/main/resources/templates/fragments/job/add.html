@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Job</title>
+</head>
+<body>
+<th:block th:fragment="content" >
+    <form action="#" th:action="@{/api/job/add}" th:object="${newJob}" method="post">
+        <div class="form-group">
+            <label class="col-form-label mt-1" for="addDescription">Description</label>
+            <textarea type="text" th:field="*{description}" class="form-control" placeholder="Description" id="addDescription" required></textarea>
+            <div id="add-description-error" style="color: darkred"></div>
+        </div>
+        <div class="form-group">
+            <label for="addStatus" class="form-label mt-2">Status</label>
+            <select class="form-select" id="addStatus" th:field="*{status.id}">
+                <option th:each="status : ${statusList}" th:value="${status.id}" th:text="${status.name}"></option>
+            </select>
+            <div id="add-status-error" style="color: darkred"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label mt-1" for="addTargetDate">Target Date</label>
+            <input type="date" class="form-control" id="addTargetDate" name="addTargetDate" th:field="*{targetDate}">
+            <div id="add-target-date-error" style="color: darkred"></div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" >Add</button>
+        </div>
+    </form>
+</th:block>
+</body>
+</html>

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -25,5 +26,6 @@ public class JobDto {
     private StatusDto status;
 
     @NotNull(message = "Date can not be null!")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date targetDate;
 }

@@ -1,17 +1,15 @@
 package com.hitit.todoapp.controller;
 
 import com.hitit.todoapp.dto.JobDto;
-import com.hitit.todoapp.results.DataResult;
 import com.hitit.todoapp.results.SuccessDataResult;
 import com.hitit.todoapp.service.JobService;
+import com.hitit.todoapp.service.StatusService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping(value = {"","/","api/job"})
@@ -19,34 +17,48 @@ import java.util.List;
 public class JobController {
 
     private final JobService jobService;
+    private final StatusService statusService;
 
-    @GetMapping(value = {"","/","/list"})
-    public String list(Model model){
-        model.addAttribute("jobList", new SuccessDataResult<>(jobService.list(), "Jobs were listed!"));
+    @GetMapping(value = {"","/"})
+    public String main(Model model){
         return "index";
     }
 
-    @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public DataResult<JobDto> add(@RequestBody @Valid JobDto jobDto){
-        return new SuccessDataResult<>(jobService.add(jobDto), "Job was added!");
+    @GetMapping(value = {"/list"})
+    public String listPage(Model model) {
+        model.addAttribute("jobList", new SuccessDataResult<>(jobService.list(), "Jobs were listed!"));
+        return "fragments/job/list :: content";
     }
 
-    @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public DataResult<JobDto> update(@RequestBody @Valid JobDto jobDto){
-        return new SuccessDataResult<>(jobService.update(jobDto), "Job was updated!");
+    @GetMapping(value = {"/add-page"})
+    public String addPage(Model model) {
+        model.addAttribute("newJob", new JobDto());
+        model.addAttribute("statusList", statusService.list());
+        return "fragments/job/add :: content";
     }
 
-    @PostMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public DataResult<JobDto> delete(@RequestBody JobDto jobDto){
-        return new SuccessDataResult<>(jobService.delete(jobDto), "Job was deleted!");
+    @PostMapping(value = "/add")
+    public String add(@ModelAttribute("newJob") JobDto newJob){
+        jobService.add(newJob);
+        return "redirect:/";
     }
 
-    @PostMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public DataResult<JobDto> find(@RequestBody JobDto jobDto){
-        return new SuccessDataResult<>(jobService.find(jobDto), "Job was found!");
+    @PostMapping(value = "/update")
+    public String update(@RequestBody @Valid JobDto jobDto, Model model){
+        jobService.update(jobDto);
+        return listPage(model);
+    }
+
+    @PostMapping(value = "/delete")
+    public String delete(@RequestBody JobDto jobDto, Model model){
+        jobService.delete(jobDto);
+        return listPage(model);
+    }
+
+    @PostMapping(value = "/find")
+    public String find(@RequestBody JobDto jobDto, Model model){
+        model.addAttribute("job", jobService.find(jobDto));
+        model.addAttribute("statusList", statusService.list());
+        return "fragments/job/update :: content";
     }
 }

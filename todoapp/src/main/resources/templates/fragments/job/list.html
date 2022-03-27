@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List Jobs</title>
+</head>
+<body>
+<th:block th:fragment="content">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col" class="col-md-1">ID</th>
+            <th scope="col" class="col-md-3">Job</th>
+            <th scope="col" class="col-md-3">Status</th>
+            <th scope="col" class="col-md-3">Target Date</th>
+            <th scope="col" class="col-md-2">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-success btn-sm"
+                                onclick="addJobConfig()">Job Add</button>
+                    </div>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="job : ${jobList.data}" class="table-info">
+            <td th:text="${job.id}"></td>
+            <td th:text="${job.description}"></td>
+            <td th:text="${job.status.name}"></td>
+            <td th:text="${job.targetDate}"></td>
+            <td>
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-primary btn-sm"
+                                th:onclick="'getJobById('+ ${job.id}+')'">Update</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-danger btn-sm"
+                                th:onclick="'deleteJobById('+ ${job.id}+')'">Delete</button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</th:block>
+</body>
+</html>

@@ -5,6 +5,7 @@
     <title>TODO App</title>
     <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/job/list.js}"></script>
     <script type="text/javascript" th:src="@{/js/job/add.js}"></script>
     <script type="text/javascript" th:src="@{/js/job/update.js}"></script>
     <script type="text/javascript" th:src="@{/js/job/delete.js}"></script>
@@ -20,48 +21,9 @@
 <div class="container">
     <div class="row justify-content-center mt-3">
         <div class="col-md-12">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col" class="col-md-1">ID</th>
-                    <th scope="col" class="col-md-3">Job</th>
-                    <th scope="col" class="col-md-3">Status</th>
-                    <th scope="col" class="col-md-3">Target Date</th>
-                    <th scope="col" class="col-md-2">
-                        <div class="row justify-content-center">
-                            <div class="col-md-6">
-                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addModal" th:onclick="'addJobConfig()'">Job Add</button>
-                            </div>
-                        </div>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="job : ${jobList.data}" class="table-info">
-                    <td th:text="${job.id}"></td>
-                    <td th:text="${job.description}"></td>
-                    <td th:text="${job.status.name}"></td>
-                    <td th:text="${job.targetDate}"></td>
-                    <td>
-                        <div class="row justify-content-center">
-                            <div class="col-md-4">
-                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#updateModal" th:onclick="'getJobById('+ ${job.id}+')'">Update</button>
-                            </div>
-                            <div class="col-md-6">
-                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal" th:onclick="'deleteJobById('+ ${job.id}+')'">Delete</button>
-                            </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div id="content"></div>
         </div>
     </div>
 </div>
-
-<div th:replace="modals/add.html :: add"></div>
-<div th:replace="modals/update.html :: update"></div>
-<div th:replace="modals/delete.html :: delete"></div>
 </body>
 </html>
